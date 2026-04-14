@@ -28,18 +28,14 @@ A simple **Flask** web application to manage student records with **MongoDB** as
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
-cd <repo-folder>
+git clone https://github.com/mohanDevOps-arch/flask_Practice.git
+cd flask_Practice
 ```
 
 ### 2. Create and activate a virtual environment
 
 ```bash
 python -m venv venv
-# Activate venv
-# Windows:
-venv\Scripts\activate
-# Linux / Mac:
 source venv/bin/activate
 ```
 
@@ -63,8 +59,8 @@ bson
 Create a `.env` file in the project root:
 
 ```
-MONGO_URI=<your-mongodb-connection-string>
-SECRET_KEY=<your-secret-key>
+MONGO_URI=mongodb+srv://santosharma:2TNVQGuJsJvRy0pT@travelmemorydb.0kzvz9q.mongodb.net/studentDB
+
 ```
 
 ### 5. Run the application
@@ -73,11 +69,13 @@ SECRET_KEY=<your-secret-key>
 python app.py
 ```
 
-Open your browser at: [http://localhost:8000](http://localhost:8000)
+Open your browser at: [http://localhost:5000](http://localhost:5000)
 
 ---
 
 ## Project Structure
+<img width="1363" height="760" alt="app1" src="https://github.com/user-attachments/assets/1379aaa2-f4a0-4d72-812e-03021f9390ab" />
+<img width="1363" height="760" alt="app1" src="https://github.com/user-attachments/assets/44424662-e054-4a44-8eb3-28faf510caf6" />
 
 ```
 project/
@@ -106,12 +104,13 @@ Lists all students with Edit/Delete buttons.
 Form to add a new student.
 - <img width="1897" height="801" alt="image" src="https://github.com/user-attachments/assets/d65d25c3-ebb5-410a-adb1-e130ad7c5878" />
 
+- <img width="1363" height="760" alt="app1" src="https://github.com/user-attachments/assets/87966331-2606-4958-aa1a-4183ddf32ab9" />
 
 **Update Student**
 Form pre-filled with student details.
 - <img width="1905" height="897" alt="image" src="https://github.com/user-attachments/assets/04febf01-879f-431f-ab07-abcfb993acf1" />
 
-
+- <img width="1365" height="767" alt="app update" src="https://github.com/user-attachments/assets/88d74b1a-071e-4e83-9fe5-a5b3a1da09c5" />
 
 ---
 

@@ -75,7 +75,6 @@ Open your browser at: [http://localhost:5000](http://localhost:5000)
 
 ## Project Structure
 <img width="1363" height="760" alt="app1" src="https://github.com/user-attachments/assets/1379aaa2-f4a0-4d72-812e-03021f9390ab" />
-<img width="1363" height="760" alt="app1" src="https://github.com/user-attachments/assets/44424662-e054-4a44-8eb3-28faf510caf6" />
 
 ```
 project/
@@ -97,7 +96,8 @@ project/
 
 **Home Page**
 Lists all students with Edit/Delete buttons.
-- <img width="1902" height="607" alt="image" src="https://github.com/user-attachments/assets/a58a6a6d-4978-4769-8074-232e4d31e69d" />
+
+- <img width="1363" height="760" alt="app1" src="https://github.com/user-attachments/assets/44424662-e054-4a44-8eb3-28faf510caf6" />
 
 
 **Add Student**

@@ -32,6 +32,11 @@ git clone https://github.com/mohanDevOps-arch/flask_Practice.git
 cd flask_Practice
 ```
 
+
+<img width="1365" height="763" alt="code push" src="https://github.com/user-attachments/assets/e3d6b921-75ea-4b6c-a5c1-98ce38a24d74" />
+<img width="1365" height="763" alt="code push" src="https://github.com/user-attachments/assets/a3d9d181-16bb-4b57-a60d-d751ddc6aa44" />
+
+
 ### 2. Create and activate a virtual environment
 
 ```bash
@@ -129,6 +134,12 @@ Form pre-filled with student details.
 
 MIT License
 
+
+Author
+
+Santosh Kumar Sharma (12394), Batch-15
+
+DevOps & Cloud Enthusiast
 ---
 
 

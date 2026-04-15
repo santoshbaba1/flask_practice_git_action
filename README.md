@@ -129,7 +129,8 @@ Form pre-filled with student details.
 
 - <img width="1365" height="761" alt="docker build 1" src="https://github.com/user-attachments/assets/269c3a60-cc91-406a-b24b-87cf99951399" />
 ---
-
+**Final Working Command**
+docker run -d -p 5000:5000 flask-app:1.0
 ## License
 
 MIT License

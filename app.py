@@ -25,10 +25,12 @@ def add_student():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
+        location = request.form['location']
         course = request.form['course']
         mongo.db.students.insert_one({
             "name": name,
             "email": email,
+            "location": location,
             "course": course
         })
         return redirect(url_for('index'))
@@ -41,10 +43,11 @@ def update_student(student_id):
     if request.method == 'POST':
         new_name = request.form['name']
         new_email = request.form['email']
+        new_location = request.form['location']
         new_course = request.form['course']
         mongo.db.students.update_one(
             {"_id": ObjectId(student_id)},
-            {"$set": {"name": new_name, "email": new_email, "course": new_course}}
+            {"$set": {"name": new_name, "email": new_email, "location": new_location, "course": new_course}}
         )
         return redirect(url_for('index'))
     return render_template('update_student.html', student=student)

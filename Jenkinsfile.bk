@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/santoshbaba1/flask_Practice_Copy.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh '''
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh '''
+                . venv/bin/activate
+                pytest
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                pkill -f app.py || true
+                nohup python3 app.py &
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            mail to: 'santoshbaba1@rediffmail.com',
+                 subject: "SUCCESS: Jenkins Build",
+                 body: "Build successful!"
+        }
+        failure {
+            mail to: 'santoshbaba1@rediffmail.com',
+                 subject: "FAILED: Jenkins Build",
+                 body: "Build failed!"
+        }
+    }
+}

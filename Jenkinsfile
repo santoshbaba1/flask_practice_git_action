@@ -1,19 +1,33 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout(true)
+    }
+
+    environment {
+        VENV = "venv"
+    }
+
     stages {
 
-        stage('Clone Code') {
+        stage('Checkout Code') {
             steps {
-                git 'https://github.com/santoshbaba1/flask_Practice_Copy.git'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/santoshbaba1/flask_Practice_Copy.git'
+                    ]]
+                ])
             }
         }
 
         stage('Build') {
             steps {
                 sh '''
-                python3 -m venv venv
-                . venv/bin/activate
+                python3 -m venv $VENV
+                . $VENV/bin/activate
                 pip install -r requirements.txt
                 '''
             }
@@ -22,7 +36,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                . venv/bin/activate
+                . $VENV/bin/activate
                 pytest
                 '''
             }
@@ -32,22 +46,9 @@ pipeline {
             steps {
                 sh '''
                 pkill -f app.py || true
-                nohup python3 app.py &
+                nohup python3 app.py > app.log 2>&1 &
                 '''
             }
-        }
-    }
-
-    post {
-        success {
-            mail to: 'santoshbaba1@rediffmail.com',
-                 subject: "SUCCESS: Jenkins Build",
-                 body: "Build successful!"
-        }
-        failure {
-            mail to: 'santoshbaba1@rediffmail.com',
-                 subject: "FAILED: Jenkins Build",
-                 body: "Build failed!"
         }
     }
 }

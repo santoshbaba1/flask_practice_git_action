@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        VENV = "venv"
-        PORT = "5000"
-        APP_NAME = "flask-app"
-    }
-
     stages {
 
         stage('Clone Code') {
@@ -15,17 +9,12 @@ pipeline {
             }
         }
 
-        stage('Build & Install Dependencies') {
+        stage('Build') {
             steps {
                 sh '''
-                python3 -m venv $VENV
-                . $VENV/bin/activate
-
-                pip install --upgrade pip
+                python3 -m venv venv
+                . venv/bin/activate
                 pip install -r requirements.txt
-
-                # Production server
-                pip install gunicorn
                 '''
             }
         }
@@ -33,36 +22,17 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                . $VENV/bin/activate
-                pytest --maxfail=1 --disable-warnings
+                . venv/bin/activate
+                pytest
                 '''
             }
         }
 
-        stage('Stop Previous App') {
+        stage('Deploy') {
             steps {
                 sh '''
-                pkill -f "gunicorn" || true
-                pkill -f "app.py" || true
-                '''
-            }
-        }
-
-        stage('Deploy Application') {
-            steps {
-                sh '''
-                . $VENV/bin/activate
-
-                nohup gunicorn -b 0.0.0.0:$PORT app:app > app.log 2>&1 &
-                '''
-            }
-        }
-
-        stage('Health Check') {
-            steps {
-                sh '''
-                sleep 5
-                curl -f http://localhost:$PORT || exit 1
+                pkill -f app.py || true
+                nohup python3 app.py &
                 '''
             }
         }
@@ -71,13 +41,13 @@ pipeline {
     post {
         success {
             mail to: 'santoshbaba1@rediffmail.com',
-                 subject: "SUCCESS: Build #${BUILD_NUMBER}",
-                 body: "Flask app deployed successfully on port ${PORT}"
+                 subject: "SUCCESS: Jenkins Build",
+                 body: "Build successful!"
         }
         failure {
             mail to: 'santoshbaba1@rediffmail.com',
-                 subject: "FAILED: Build #${BUILD_NUMBER}",
-                 body: "Build failed. Check Jenkins console output."
+                 subject: "FAILED: Jenkins Build",
+                 body: "Build failed!"
         }
     }
 }

@@ -30,7 +30,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                $VENV/bin/activate
+                . $VENV/bin/activate
                 pytest
                 '''
             }

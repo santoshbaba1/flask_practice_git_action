@@ -15,6 +15,7 @@ def client():
             "_id": ObjectId("66fddff25f4b5f6a0a123456"),
             "name": "Test Student",
             "email": "test@student.com",
+            "location": "Kanpur",
             "course": "Flask"
         })
     yield client
@@ -33,7 +34,7 @@ def test_home_page(client):
 
 def test_add_student(client):
     """Test adding a new student"""
-    data = {"name": "New User", "email": "new@user.com", "course": "Python"}
+    data = {"name": "New User", "email": "new@user.com", "location": "Kanpur","course": "Python"}
     response = client.post('/add', data=data, follow_redirects=True)
     assert response.status_code == 200
     assert b"New User" in response.data
@@ -42,7 +43,7 @@ def test_add_student(client):
 def test_update_student(client):
     """Test updating a student"""
     student_id = "66fddff25f4b5f6a0a123456"
-    data = {"name": "Updated Name", "email": "updated@student.com", "course": "Updated Course"}
+    data = {"name": "Updated Name", "email": "updated@student.com", "location": "Kanpur","course": "Updated Course"}
     response = client.post(f'/update/{student_id}', data=data, follow_redirects=True)
     assert response.status_code == 200
     assert b"Updated Name" in response.data
@@ -55,6 +56,7 @@ def test_delete_student(client):
         student_id = mongo.db.students.insert_one({
             "name": "Temp User",
             "email": "temp@user.com",
+            "location": "Kanpur",
             "course": "Temp Course"
         }).inserted_id
 

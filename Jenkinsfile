@@ -66,6 +66,5 @@ pipeline {
                 body: "Build failed! Check: ${BUILD_URL}"
             )
         }
-    }
-    }
+      }
 }

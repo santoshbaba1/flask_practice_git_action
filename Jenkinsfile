@@ -7,8 +7,7 @@ pipeline {
     }
 
     stages {
-
-       stage('Clone Code') {
+        stage('Clone Code') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/santoshbaba1/flask_Practice_Copy.git'
@@ -18,49 +17,55 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                # Create virtual environment
-                python3 -m venv $VENV
-                
-                # Install dependencies using full path (IMPORTANT FIX)
-                $VENV/bin/pip install --upgrade pip
-                $VENV/bin/pip install -r requirements.txt
+                    python3 -m venv $VENV
+                    $VENV/bin/pip install --upgrade pip
+                    $VENV/bin/pip install -r requirements.txt
                 '''
             }
         }
+
         stage('Test') {
             steps {
                 sh '''
-                . $VENV/bin/activate
-                pytest
+                    . $VENV/bin/activate
+                    pytest
                 '''
             }
         }
-         stage('Deploy') {
+
+        stage('Deploy') {
             steps {
                 sh '''
-                pkill -f app.py || true
-                nohup venv/bin/python3 app.py > app.log 2>&1 &
+                    pkill -f app.py || true
+                    nohup venv/bin/python3 app.py > app.log 2>&1 &
                 '''
             }
-         }
+        }
+
         stage('Health Check') {
             steps {
                 sh '''
-                sleep 5
-                curl -f http://192.168.1.9:$PORT || exit 1
+                    sleep 5
+                    curl -f http://192.168.1.9:$PORT || exit 1
                 '''
             }
         }
-         post {
+    }
+
+    post {
         success {
-            mail to: 'santoshpvt08@gmail.com',
-                 subject: "SUCCESS: Jenkins Build",
-                 body: "Build successful!"
+            emailext (
+                to: 'santoshpvt08@gmail.com',
+                subject: "SUCCESS: Build ${BUILD_NUMBER}",
+                body: "Build succeeded! Check: ${BUILD_URL}"
+            )
         }
         failure {
-            mail to: 'santoshpvt08@gmail.com',
-                 subject: "FAILED: Jenkins Build",
-                 body: "Build failed!"
+            emailext (
+                to: 'santoshpvt08@gmail.com',
+                subject: "FAILED: Build ${BUILD_NUMBER}",
+                body: "Build failed! Check: ${BUILD_URL}"
+            )
         }
-      }
+    }
 }

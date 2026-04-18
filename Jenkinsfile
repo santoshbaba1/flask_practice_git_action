@@ -52,7 +52,7 @@ pipeline {
         }
     }
 
-    post {
+    post('Email Notification') {
         success {
             emailext (
                 to: 'santoshpvt08@gmail.com',

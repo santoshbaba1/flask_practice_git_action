@@ -57,14 +57,18 @@ pipeline {
             emailext (
                 to: 'santoshpvt08@gmail.com',
                 subject: "SUCCESS: Build ${BUILD_NUMBER}",
-                body: "Build succeeded! Check: ${BUILD_URL}"
+                body: "Build succeeded! Check: ${BUILD_URL}",
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: '587'
             )
         }
         failure {
             emailext (
                 to: 'santoshpvt08@gmail.com',
                 subject: "FAILED: Build ${BUILD_NUMBER}",
-                body: "Build failed! Check: ${BUILD_URL}"
+                body: "Build failed! Check: ${BUILD_URL}",
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: '587'
             )
         }
     }

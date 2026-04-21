@@ -1,69 +1,102 @@
+import os
 import pytest
-from app import app, mongo,create_app
-from flask_pymongo import PyMongo
+from app import app, mongo
 from bson.objectid import ObjectId
+
 
 @pytest.fixture
 def client():
-    app = create_app()
+    """Create test client with isolated test DB"""
+
     app.config["TESTING"] = True
-    # app.config["MONGO_URI"] = "mongodb://localhost:27017/test_student_db"  # test DB
-    
-   # mongo = PyMongo(app)
+
+    # ✅ Use environment variable (SECURE)
+    app.config["MONGO_URI"] = os.getenv(
+        "MONGO_URI",
+        "mongodb://localhost:27017/test_flask_db"
+    )
+
     client = app.test_client()
 
-    # Setup: clear and create test data
     with app.app_context():
+        # Clean database before tests
         mongo.db.students.delete_many({})
-        mongo.db.students.insert_one({
-            "_id": ObjectId("66fddff25f4b5f6a0a123456"),
-            "name": "Test Student",
-            "email": "test@student.com",
-            "location": "Kanpur",
-            "course": "Flask"
-        })
+
+        # Insert test data
+        mongo.db.students.insert_one(
+            {
+                "_id": ObjectId("66fddff25f4b5f6a0a123456"),
+                "name": "Test Student",
+                "email": "test@student.com",
+                "Location": "Kanpur",
+                "course": "Flask",
+            }
+        )
+
     yield client
 
-    # Teardown: drop DB after test
     with app.app_context():
-        mongo.cx.drop_database("test_student_db")
-
-
+        # Cleanup after tests
+        mongo.db.students.delete_many({})
+    
 def test_home_page(client):
-    """Test if home page loads correctly"""
-    response = client.get('/')
+    """Test home page loads correctly"""
+    response = client.get("/")
+
     assert response.status_code == 200
     assert b"Test Student" in response.data
 
 
 def test_add_student(client):
-    """Test adding a new student"""
-    data = {"name": "New User", "email": "new@user.com", "location": "Kanpur","course": "Python"}
-    response = client.post('/add', data=data, follow_redirects=True)
+    """Test adding student"""
+    data = {
+        "name": "New User",
+        "email": "new@user.com",
+        "Location": "Kanpur",
+        "course": "Python",
+    }
+
+    response = client.post("/add", data=data, follow_redirects=True)
+
     assert response.status_code == 200
     assert b"New User" in response.data
 
 
 def test_update_student(client):
-    """Test updating a student"""
+    """Test updating student"""
     student_id = "66fddff25f4b5f6a0a123456"
-    data = {"name": "Updated Name", "email": "updated@student.com", "location": "Kanpur","course": "Updated Course"}
-    response = client.post(f'/update/{student_id}', data=data, follow_redirects=True)
+
+    data = {
+        "name": "Updated Name",
+        "email": "updated@student.com",
+        "Location": "Kanpur",
+        "course": "Updated Course",
+    }
+
+    response = client.post(
+        f"/update/{student_id}",
+        data=data,
+        follow_redirects=True
+    )
+
     assert response.status_code == 200
     assert b"Updated Name" in response.data
 
 
 def test_delete_student(client):
-    """Test deleting a student"""
-    # Add a temporary student
-    with app.app_context():
-        student_id = mongo.db.students.insert_one({
-            "name": "Temp User",
-            "email": "temp@user.com",
-            "location": "Kanpur",
-            "course": "Temp Course"
-        }).inserted_id
+    """Test deleting student"""
 
-    response = client.get(f'/delete/{student_id}', follow_redirects=True)
+    with app.app_context():
+        student_id = mongo.db.students.insert_one(
+            {
+                "name": "Temp User",
+                "email": "temp@user.com",
+                "Location": "Kanpur",
+                "course": "Temp Course",
+            }
+        ).inserted_id
+
+    response = client.get(f"/delete/{student_id}", follow_redirects=True)
+
     assert response.status_code == 200
     assert b"Temp User" not in response.data

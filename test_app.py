@@ -13,7 +13,7 @@ def client():
     # ✅ Use environment variable (SECURE)
     app.config["MONGO_URI"] = os.getenv(
         "MONGO_URI",
-        "mongodb://localhost:27017/test_students_db"
+        "mongodb://192.168.1.8:27017/test_students_db"
     )
 
     client = app.test_client()

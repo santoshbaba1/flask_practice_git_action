@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 def client():
     app = create_app()
     app.config["TESTING"] = True
-    app.config["MONGO_URI"] = "mongodb://localhost:27017/test_student_db"  # test DB
+    # app.config["MONGO_URI"] = "mongodb://localhost:27017/test_student_db"  # test DB
     
     mongo = PyMongo(app)
     client = app.test_client()

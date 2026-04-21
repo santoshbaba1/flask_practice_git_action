@@ -34,6 +34,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       env:
-         MONGO_URI: mongodb://localhost:27017/test_students_db
+         MONGO_URI: mongodb://192.168.10.7:27017/test_students_db
       run: |
         pytest

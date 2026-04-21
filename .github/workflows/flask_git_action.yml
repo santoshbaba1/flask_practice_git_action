@@ -24,7 +24,7 @@ jobs:
     
     - name: Run Tests
       env:
-          MONGO_URI: mongodb://localhost:27017/test_student_db
+          MONGO_URI: mongodb://192.168.1.8:27017/test_student_db
       run: pytest --cache-clear -v
 
   

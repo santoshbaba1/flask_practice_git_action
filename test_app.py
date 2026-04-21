@@ -1,4 +1,4 @@
-import pytest
+import pytest,flask.app
 from app import app, mongo,create_app
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId

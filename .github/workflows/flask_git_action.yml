@@ -1,5 +1,4 @@
 name: Flask CI/CD Pipeline
-
 on:
   push:
     branches:
@@ -8,21 +7,16 @@ on:
   pull_request:
     branches:
       - main
-
 jobs:
-
   build-test:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
-
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
-
     - name: Install Dependencies
       run: |
         pip install --upgrade pip
@@ -36,40 +30,4 @@ jobs:
         pip install pytest
         pytest
 
-  build:
-    needs: build-test
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-
-    - name: Build App (Docker Image)
-      run: |
-        docker build -t flask-app .
-
-  deploy-staging:
-    if: github.ref == 'refs/heads/staging'
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Deploy to Staging Server
-      run: |
-        echo "Deploying to staging..."
-        ssh ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} "
-        cd /apps/flask && git pull && docker-compose up -d --build
-        "
-
-  deploy-production:
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Deploy to Production
-      run: |
-        echo "Deploying to production..."
-        ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-        cd /apps/flask && git pull && docker-compose up -d --build
-        "
+  

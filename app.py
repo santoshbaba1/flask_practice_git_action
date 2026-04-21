@@ -8,7 +8,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = os.getenv("mongodb://192.168.10.7:27017/test_students_db")
+app.config["MONGO_URI"] = os.getenv("MONGO_URI","mongodb://192.168.10.7:27017/test_students_db")
 app.secret_key = os.getenv("SECRET_KEY")
 
 mongo = PyMongo(app)

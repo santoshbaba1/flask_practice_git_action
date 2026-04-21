@@ -6,12 +6,14 @@ import os
 
 # Load env vars
 load_dotenv()
+mongo = PyMongo()
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = os.getenv("MONGO_URI","mongodb://localhost:27017/test_students_db")
 # app.secret_key = os.getenv("SECRET_KEY")
 
-mongo = PyMongo(app)
+mongo.init_app(app)
+# mongo = PyMongo(app)
 
 # Home page -> list students
 @app.route('/')

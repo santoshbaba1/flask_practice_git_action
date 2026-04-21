@@ -1,10 +1,11 @@
 import pytest
-from app import app, mongo
+from app import app, mongo,create_app
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
 @pytest.fixture
 def client():
+    app = create_app()
     app.config["TESTING"] = True
     app.config["MONGO_URI"] = "mongodb://localhost:27017/test_student_db"  # test DB
     

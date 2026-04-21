@@ -28,6 +28,6 @@ jobs:
           MONGO_URI: ${{ secrets.MONGO_URI }}
       run: |
         pip install pytest
-        pytest
+        pytest -V
 
   

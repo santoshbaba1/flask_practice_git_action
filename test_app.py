@@ -13,7 +13,7 @@ def client():
     # ✅ Use environment variable (SECURE)
     app.config["MONGO_URI"] = os.getenv(
         "MONGO_URI",
-        "mongodb://localhost:27017/test_flask_db"
+        "mongodb://localhost:27017/test_students_db"
     )
 
     client = app.test_client()
@@ -28,8 +28,8 @@ def client():
                 "_id": ObjectId("66fddff25f4b5f6a0a123456"),
                 "name": "Test Student",
                 "email": "test@student.com",
-                "Location": "Kanpur",
-                "course": "Flask",
+                "location": "Kanpur",
+                "course": "DevOps",
             }
         )
 
@@ -52,8 +52,8 @@ def test_add_student(client):
     data = {
         "name": "New User",
         "email": "new@user.com",
-        "Location": "Kanpur",
-        "course": "Python",
+        "location": "Kanpur",
+        "course": "DevOps",
     }
 
     response = client.post("/add", data=data, follow_redirects=True)
@@ -69,7 +69,7 @@ def test_update_student(client):
     data = {
         "name": "Updated Name",
         "email": "updated@student.com",
-        "Location": "Kanpur",
+        "location": "Kanpur",
         "course": "Updated Course",
     }
 
@@ -91,7 +91,7 @@ def test_delete_student(client):
             {
                 "name": "Temp User",
                 "email": "temp@user.com",
-                "Location": "Kanpur",
+                "location": "Kanpur",
                 "course": "Temp Course",
             }
         ).inserted_id

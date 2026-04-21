@@ -1,4 +1,4 @@
-from flask import Flask, app, render_template, request, redirect, url_for
+from flask import Flask, app,render_template, request, redirect, url_for
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
@@ -11,13 +11,13 @@ mongo = PyMongo()
 def create_app():
     app = Flask(__name__)
     app.config["MONGO_URI"] = os.getenv("MONGO_URI","mongodb://localhost:27017/test_students_db")
-    mongo.init_app(app)
+    #mongo.init_app(app)
     return app
 #app = Flask(__name__)
 #app.config["MONGO_URI"] = os.getenv("MONGO_URI","mongodb://localhost:27017/test_students_db")
 # app.secret_key = os.getenv("SECRET_KEY")
 
-mongo.init_app(app)
+#mongo.init_app(app)
 # mongo = PyMongo(app)
 
 # Home page -> list students

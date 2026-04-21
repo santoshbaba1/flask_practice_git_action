@@ -10,7 +10,7 @@ mongo = PyMongo()
 
 def create_app():
     app = Flask(__name__)
-    app.config["MONGO_URI"] = os.getenv("MONGO_URI","mongodb://localhost:27017/test_students_db")
+    app.config["MONGO_URI"] = os.getenv("MONGO_URI","mongodb://192.168.1.8:27017/test_students_db")
     #mongo.init_app(app)
     return app
 #app = Flask(__name__)

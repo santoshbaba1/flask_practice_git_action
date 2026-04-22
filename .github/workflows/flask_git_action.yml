@@ -53,8 +53,8 @@ jobs:
           # ssh user@staging-server "cd app && git pull && docker-compose up -d"
 
   deploy-to-production:
-    needs: build-test
-    if: github.event_name == 'release'
+    needs: deploy-to-staging
+    if: github.ref == 'refs/heads/main' #if: github.event_name == 'release'
     runs-on: ubuntu-latest
 
     steps:

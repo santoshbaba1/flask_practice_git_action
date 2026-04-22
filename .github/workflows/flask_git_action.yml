@@ -24,7 +24,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version: 3.11
 
       - name: Install Dependencies
         run: |
@@ -40,4 +40,26 @@ jobs:
         run: |
           pytest -v
 
-  
+  deploy-to-staging:
+    needs: build-test
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Staging Server
+        run: |
+          echo "Deploying to STAGING..."
+          # Example (replace with real deployment)
+          # ssh user@staging-server "cd app && git pull && docker-compose up -d"
+
+  deploy-to-production:
+    needs: build-test
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Production Server
+        run: |
+          echo "Deploying to PRODUCTION..."
+          # Example:
+          # ssh user@prod-server "cd app && git pull && docker-compose up -d"

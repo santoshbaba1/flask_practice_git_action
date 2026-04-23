@@ -60,7 +60,7 @@ jobs:
           script: |
             echo "🚀 Deploying to STAGING..."
 
-            cd YOUR_REPO || exit 1
+            cd flask_practice_git_action || exit 1
 
             echo "📥 Pull latest code"
             git pull origin staging

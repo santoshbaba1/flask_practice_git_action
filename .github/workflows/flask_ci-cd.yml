@@ -24,24 +24,21 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version: 3.11
 
       - name: Install Dependencies
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Set ENV
-        run: echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
+      #- name: Set Environment Variables
+      #  run: |
+      #   echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
 
       - name: Run Tests
-        run: pytest -v
-
-      - name: Build
         run: |
-          echo "Building app..."
-          python -m compileall .
+          pytest -v
 
   deploy-staging:
     needs: build-test
@@ -49,10 +46,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Staging
+      - name: Deploy to Staging Server
         run: |
-          echo "Deploying to staging..."
-          # Example:
+          echo "Deploying to STAGING..."
+          # Example (replace with real deployment)
           # ssh user@staging-server "cd app && git pull && docker-compose up -d"
 
   deploy-production:
@@ -61,8 +58,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Production
+      - name: Deploy to Production Server
         run: |
-          echo "Deploying to production..."
+          echo "Deploying to PRODUCTION..."
           # Example:
           # ssh user@prod-server "cd app && git pull && docker-compose up -d"

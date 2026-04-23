@@ -43,42 +43,29 @@ jobs:
           pytest -v
 
   deploy-to-staging:
-    needs: build-test
-    if: contains(github.ref, 'staging') #if: github.ref == 'refs/heads/staging'
+      needs: build-test
+      if: github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Deploy to Staging Server
-    #    run: |
-    #      echo "Deploying to STAGING..."
-          # Example (replace with real deployment)
-          # ssh user@staging-server "cd app && git pull && docker-compose up -d"
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USER }}
-          key: ${{ secrets.STAGING_SSH_KEY }}
-          port: ${{ secrets.STAGING_PORT }}
-          script: |
-            echo "🚀 Deploying to STAGING..."
+  steps:
+    - name: Deploy to Staging Server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: ${{ secrets.STAGING_USER }}
+        key: ${{ secrets.STAGING_SSH_KEY }}
+        port: ${{ secrets.STAGING_PORT }}
+        script: |
+          echo "🚀 Deploying to STAGING..."
 
-            cd flask_practice_git_action || exit 1
+          cd flask_practice_git_action || exit 1
 
-            echo "📥 Pull latest code"
-            git pull origin staging
+          git pull origin staging
 
-            echo "🛑 Stop old containers"
-            docker-compose down
+          docker compose down
+          docker compose up -d --build
 
-            echo "🔨 Build new containers"
-            docker-compose build
-
-            echo "▶️ Start containers"
-            docker-compose up -d
-
-            echo "🧹 Clean unused images"
-            docker image prune -f
-
+          docker image prune -f
   deploy-to-production:
     needs: deploy-to-staging
     if: startsWith(github.ref, 'refs/tags/') #if: github.ref == 'refs/heads/main' #if: github.event_name == 'release'

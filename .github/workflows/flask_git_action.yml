@@ -45,27 +45,27 @@ jobs:
   deploy-to-staging:
       needs: build-test
       if: github.ref == 'refs/heads/staging'
-    runs-on: ubuntu-latest
+      runs-on: ubuntu-latest
 
-  steps:
-    - name: Deploy to Staging Server
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.STAGING_HOST }}
-        username: ${{ secrets.STAGING_USER }}
-        key: ${{ secrets.STAGING_SSH_KEY }}
-        port: ${{ secrets.STAGING_PORT }}
-        script: |
-          echo "🚀 Deploying to STAGING..."
+      steps:
+        - name: Deploy to Staging Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          key: ${{ secrets.STAGING_SSH_KEY }}
+          port: ${{ secrets.STAGING_PORT }}
+          script: |
+            echo "🚀 Deploying to STAGING..."
 
-          cd flask_practice_git_action || exit 1
+            cd flask_practice_git_action || exit 1
 
-          git pull origin staging
+            git pull origin staging
 
-          docker compose down
-          docker compose up -d --build
+            docker compose down
+            docker compose up -d --build
 
-          docker image prune -f
+            docker image prune -f
   deploy-to-production:
     needs: deploy-to-staging
     if: startsWith(github.ref, 'refs/tags/') #if: github.ref == 'refs/heads/main' #if: github.event_name == 'release'

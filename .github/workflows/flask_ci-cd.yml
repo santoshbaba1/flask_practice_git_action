@@ -32,9 +32,9 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Set Environment Variables
-        run: |
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
+      #- name: Set Environment Variables
+      #  run: |
+      #   echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
 
       - name: Run Tests
         run: |

@@ -62,6 +62,13 @@ jobs:
 
     steps:
       - name: Deploy via SSH
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} \
+          "MONGO_URI='${MONGO_URI}' bash -s" << EOF
+          set -e
+
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.STAGING_HOST }}

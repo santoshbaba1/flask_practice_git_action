@@ -1,0 +1,66 @@
+name: Flask CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+  pull_request:
+    branches:
+      - main
+      - staging
+  release:
+    types: [created]
+
+jobs:
+
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Set Environment Variables
+        run: |
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
+
+      - name: Run Tests
+        run: |
+          pytest -v
+
+  deploy-to-staging:
+    needs: build-test
+    
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Staging Server
+        run: |
+          echo "Deploying to STAGING..."
+          # Example (replace with real deployment)
+          # ssh user@staging-server "cd app && git pull && docker-compose up -d"
+
+  deploy-to-production:
+    needs: deploy-to-staging
+    if: github.ref == 'refs/heads/main' #if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Production Server
+        run: |
+          echo "Deploying to PRODUCTION..."
+          # Example:
+          # ssh user@prod-server "cd app && git pull && docker-compose up -d"

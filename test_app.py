@@ -1,17 +1,21 @@
 import pytest
 from app import app, mongo
 from bson.objectid import ObjectId
-
+#SS
+from app import create_app
+#SS
 @pytest.fixture
 def client():
+    #SS
+    app = create_app()
+    #ss
     app.config["TESTING"] = True
-    app.config["MONGO_URI"] = "mongodb://localhost:27017/test_student_db"  # test DB
-    client = app.test_client()
-
-    # Setup: clear and create test data
-    with app.app_context():
-        mongo.db.students.delete_many({})
-        mongo.db.students.insert_one({
+    #app.config["MONGO_URI"] = "mongodb://localhost:27017/test_student_db"  # test DB
+    with app.test_client() as client:
+        # Setup: clear and create test data
+        with app.app_context():
+            mongo.db.students.delete_many({})
+            mongo.db.students.insert_one({
             "_id": ObjectId("66fddff25f4b5f6a0a123456"),
             "name": "Test Student",
             "email": "test@student.com",

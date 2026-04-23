@@ -8,9 +8,6 @@ on:
   pull_request:
     branches:
       - main
-      - staging
-  release:
-    types: [created]
 
 jobs:
 
@@ -18,51 +15,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.12
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
 
-      - name: Install Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest
+    - name: Install Dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Set ENV
-        run: echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
-
-      - name: Run Tests
-        run: pytest -v
-
-      - name: Build
-        run: |
-          echo "Building app..."
-          python -m compileall .
-
-  deploy-staging:
-    needs: build-test
-    if: github.ref == 'refs/heads/staging'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy to Staging
-        run: |
-          echo "Deploying to staging..."
-          # Example:
-          # ssh user@staging-server "cd app && git pull && docker-compose up -d"
-
-  deploy-production:
-    needs: build-test
-    if: github.event_name == 'release'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy to Production
-        run: |
-          echo "Deploying to production..."
-          # Example:
-          # ssh user@prod-server "cd app && git pull && docker-compose up -d"
+    - name: Run Tests
+      run: |
+        pip install pytest
+        pytest
